@@ -35,9 +35,37 @@ def add_date_range(values, start_date):
 def fees_report(infile, outfile):
     """Calculates late fees per patron id and writes a summary report to
     outfile."""
-    pass
+    with open(infile) as f:
+        list_of_items=[]
+        objector = DictReader(f)
+        for item in objector:
+            each_dict={}
+            day1=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
+            if(day1.days>0):
+                each_dict["patron_id"]=item['patron_id']
+                each_dict["late_fees"]=round(day1.days*0.25, 2)
+                list_of_items.append(each_dict)
+            else:
+                each_dict["patron_id"]=item['patron_id']
+                each_dict["late_fees"]=float(0)
+                list_of_items.append(each_dict)
+        aggregation = {}
+        for each_dict in list_of_items:
+             key = (each_dict['patron_id'])
+             aggregation[key] = aggregation.get(key, 0) + each_dict['late_fees']
+        source = [{'patron_id': key, 'late_fees': value} for key, value in aggregation.items()]
+        for each_dict in source:
+            for k,v in each_dict.items():
+                if k == "late_fees":
+                    if len(str(v).split('.')[-1]) != 2:
+                        each_dict[k] = str(v)+'0'
+    with open(outfile,"w", newline="") as file:
+        column = ['patron_id', 'late_fees']
+        final_obj = DictWriter(file, fieldnames=column)
+        final_obj.writeheader()
+        final_obj.writerows(source)        
 
-
+                
 # The following main selection block will only run when you choose
 # "Run -> Module" in IDLE.  Use this section to run test code.  The
 # template code below tests the fees_report function.
@@ -56,6 +84,7 @@ if __name__ == '__main__':
     BOOK_RETURNS_PATH = get_data_file_path('book_returns_short.csv')
 
     OUTFILE = 'book_fees.csv'
+
 
     fees_report(BOOK_RETURNS_PATH, OUTFILE)
 
