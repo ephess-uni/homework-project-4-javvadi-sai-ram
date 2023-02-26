@@ -28,7 +28,7 @@ def add_date_range(values, start_date):
     list_of_date=[]
 
     for index,value in enumerate(values):
-        list_of_date.append(datetime.strptime(start_date,"%Y-%m-%d")  + timedelta(days=i))
+        list_of_date.append(datetime.strptime(start_date,"%Y-%m-%d")  + timedelta(days=index))
         return list(zip(list_of_date,values))
 
         
@@ -40,10 +40,10 @@ def fees_report(infile, outfile):
         objector = DictReader(f)
         for item in objector:
             each_dict={}
-            day1=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
-            if(day1.days>0):
+            first_day=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
+            if(first_day.days>0):
                 each_dict["patron_id"]=item['patron_id']
-                each_dict["late_fees"]=round(day1.days*0.25, 2)
+                each_dict["late_fees"]=round(first_day.days*0.25, 2)
                 list_of_items.append(each_dict)
             else:
                 each_dict["patron_id"]=item['patron_id']
