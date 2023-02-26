@@ -6,10 +6,11 @@ from collections import defaultdict
 
 
 def reformat_dates(old_dates):
+
     list_of_date=[]
 
     for each in old_dates:
-        list_of_date.append(datetime.strptime(each,"%Y-%m-%d").strftime("%d,%b,%Y"))
+        list_of_date.append(datetime.strptime(each,"%Y-%m-%d").strftime("%d %b %Y"))
     return list_of_date
 
 
