@@ -32,7 +32,7 @@ def add_date_range(values, start_date):
 
     for index,value in enumerate(values):
         list_of_date.append(datetime.strptime(start_date,"%Y-%m-%d")  + timedelta(days=index))
-        return list(zip(list_of_date,values))
+    return list(zip(list_of_date,values))
 
         
 def fees_report(infile, outfile):
