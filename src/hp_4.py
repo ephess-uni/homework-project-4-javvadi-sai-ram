@@ -16,7 +16,6 @@ def reformat_dates(old_dates):
 
 def date_range(start, n):
     
-    
     if not isinstance(start,str):
         raise TypeError
     elif not isinstance(n,int):
@@ -25,7 +24,7 @@ def date_range(start, n):
         list_of_date=[]
         for index in range(0,n):
             list_of_date.append(datetime.strptime(start,"%Y-%m-%d")  + timedelta(days=index))
-            return list_of_date
+        return list_of_date
 
 def add_date_range(values, start_date):
     list_of_date=[]
